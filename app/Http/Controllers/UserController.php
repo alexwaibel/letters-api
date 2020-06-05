@@ -25,7 +25,7 @@ class UserController extends Controller
         return api_response("ERROR", "Unauthorized", []);
       }
 
-      $users = User::simplePaginate(20);
+      $users = User::paginate(20);
 
       return api_response("OK", "", $users);
     }

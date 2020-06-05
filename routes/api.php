@@ -27,3 +27,22 @@ Route::get('/users', 'UserController@get_users');
 
 Route::get('/user/{id}', 'UserController@get_user');
 Route::put('/user/{id}', 'UserController@update_user');
+
+// Letter Routes
+Route::get('/letters', 'LetterController@get_letters');
+
+Route::get('/letter/{id}', 'LetterController@get_letter');
+Route::post('/letter', 'LetterController@create_letter');
+
+// Public Routes
+Route::get('/public/letter/html/{id}', 'PublicController@letter_html');
+
+// Contact Routes
+
+// Facility Routes
+
+// Zip Routes
+
+// Donor Routes
+
+// OrgUser Routes
