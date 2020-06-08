@@ -38,11 +38,17 @@ Route::post('/letter', 'LetterController@create_letter');
 Route::get('/public/letter/html/{id}', 'PublicController@letter_html');
 
 // Contact Routes
+Route::get('/contacts', 'ContactController@get_contacts');
+Route::get('/contact/{id}', 'ContactController@get_contact');
+Route::post('/contact', 'ContactController@create_contact');
+Route::put('/contact/{id}', 'ContactController@update_contact');
 
 // Facility Routes
 
 // Zip Routes
 
 // Donor Routes
+
+// Organization Routes
 
 // OrgUser Routes
