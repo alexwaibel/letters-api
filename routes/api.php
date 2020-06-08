@@ -28,6 +28,11 @@ Route::get('/users', 'UserController@get_users');
 Route::get('/user/{id}', 'UserController@get_user');
 Route::put('/user/{id}', 'UserController@update_user');
 
+Route::get('/user/contacts', 'UserController@get_contacts');
+Route::get('/user/letters', 'UserController@get_letters');
+Route::get('/user/org', 'UserController@get_org');
+// Route::get('/user/stats', 'UserController@get_stats');
+
 // Letter Routes
 Route::get('/letters', 'LetterController@get_letters');
 

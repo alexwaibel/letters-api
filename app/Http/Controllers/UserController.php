@@ -102,4 +102,29 @@ class UserController extends Controller
 
       return api_response("OK", "", $u);
     }
+
+    public function get_contacts(Request $request) {
+      $user = $request->user();
+
+      $contacts = Contact::where("user_id", $user->id)->get();
+
+      return api_response("OK", "", $contacts);
+    }
+
+    public function get_letters(Request $request) {
+      $user = $request->user();
+
+      $letters = Letter::where("user_id", $user->id)->get();
+
+      return api_response("OK", "", $letters);
+    }
+
+    public function get_org(Request $request) {
+      $user = $request->user();
+
+      $ou = OrgUser::where("user_id", $user->id)->first();
+      $o = Org::find($ou->org_id);
+
+      return api_response("OK", $ou->role, $o);
+    }
 }
