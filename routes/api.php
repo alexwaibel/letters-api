@@ -44,6 +44,10 @@ Route::post('/contact', 'ContactController@create_contact');
 Route::put('/contact/{id}', 'ContactController@update_contact');
 
 // Facility Routes
+Route::get('/facilities', 'FacilityController@get_facilities');
+Route::get('/facility/{id}', 'FacilityController@get_facility');
+Route::post('/facility', 'FacilityController@create_facility');
+Route::put('/facility/{id}', 'FacilityController@update_facility');
 
 // Zip Routes
 
