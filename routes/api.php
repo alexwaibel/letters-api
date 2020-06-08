@@ -51,7 +51,9 @@ Route::put('/facility/{id}', 'FacilityController@update_facility');
 
 // Zip Routes (TODO)
 
-// Donor Routes (TODO)
+// Donor Routes
+Route::post('/donate', 'DonateController@process_donate');
+Route::get('/donation/cancel/{cancel_url}', 'DonateController@cancel');
 
 // Organization Routes
 

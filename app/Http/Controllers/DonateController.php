@@ -91,6 +91,27 @@ class DonateController extends Controller
         $new_donor->save();
       }
 
-      return api_response("OK", "Donation Accepted", []);
+      return api_response("OK", "Donation Accepted", $new_donor);
+    }
+
+    public function cancel(Request $request, $cancel_url) {
+      $user = $request->user();
+
+      $donor = Donor::where("cancel_url", $cancel_url)->first();
+
+      if (!$donor) {
+        return api_response("ERROR", "Invalid Donor Cancel URL", []);
+      }
+
+      if (env('STRIPE_PROD')) {
+        Stripe::setApiKey(env('STRIPE_PROD_SECRET'));
+      } else {
+        Stripe::setApiKey(env('STRIPE_TEST_SECRET'));
+      }
+
+      $sub = Subscription::retrieve($donor->stripe_id);
+      $sub->delete();
+
+      return api_response("OK", "Subscription Cancelled", []);
     }
 }
