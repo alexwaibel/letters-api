@@ -54,7 +54,8 @@ Route::get('/facility/{id}', 'FacilityController@get_facility');
 Route::post('/facility', 'FacilityController@create_facility');
 Route::put('/facility/{id}', 'FacilityController@update_facility');
 
-// Zip Routes (TODO)
+// Zip Routes
+Route::get('/zips/{zip?}', 'ZipController@query_zips');
 
 // Donor Routes
 Route::post('/donate', 'DonateController@process_donate');

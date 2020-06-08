@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use Validator;
 
 use App\User;
+use App\Org;
+use App\OrgUser;
+use App\Letter;
+use App\Contact;
 
 class UserController extends Controller
 {
