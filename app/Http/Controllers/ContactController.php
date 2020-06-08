@@ -78,6 +78,8 @@ class ContactController extends Controller
 
       $c = new Contact;
 
+      $c->user_id = $user->id;
+
       $c->first_name = $data['first_name'];
       $c->last_name = $data['last_name'];
       $c->inmate_number = $data['inmate_number'];
@@ -118,6 +120,12 @@ class ContactController extends Controller
 
       if (!$c) {
         return api_response("ERROR", "Invalid Contact ID", []);
+      }
+
+      if ($c->user_id != $user->id) {
+        if ($user->type != "admin") {
+          return api_response("ERROR", "Unauthorized", []);
+        }
       }
 
       $validator = Validator::make($data, [
