@@ -62,3 +62,6 @@ Route::post("/org", "OrgController@create_org");
 Route::put("/org/{id}", "OrgController@update_org");
 
 // OrgUser Routes
+Route::get("/org/users", "OrgUserController@get_org_users");
+Route::get("/org/user/{id}", "OrgUserController@get_org_user");
+Route::post("/org/user", "OrgUserController@create_org_user");
