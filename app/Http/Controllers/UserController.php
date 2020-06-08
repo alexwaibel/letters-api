@@ -65,6 +65,7 @@ class UserController extends Controller
         'state' => 'required|max:255',
         'postal' => 'required|max:10',
         'country' => 'required|max:255',
+        's3_img_url' => 'nullable'
       ]);
 
       if ($validator->fails()) {
@@ -92,6 +93,10 @@ class UserController extends Controller
       $u->state = $data['state'];
       $u->postal = $data['postal'];
       $u->country = $data['country'];
+
+      if (isset($data['s3_img_url'])) {
+        $u->profile_img_path = $data['s3_img_url'];
+      }
 
       $u->save();
 

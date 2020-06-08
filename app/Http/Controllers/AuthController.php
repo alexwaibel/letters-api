@@ -87,6 +87,12 @@ class AuthController extends Controller
         $new_user->addr_line_2 = $data['address_line_2'];
       }
 
+      if (isset($data['s3_img_url'])) {
+        $new_user->profile_img_path = $data['s3_img_url'];
+      } else {
+        $new_user->profile_img_path = Storage::disk('s3')->url('images/avatars/avatar.svg');
+      }
+
       $new_user->city = $data['city'];
       $new_user->state = $data['state'];
       $new_user->postal = $data['postal'];
@@ -95,15 +101,6 @@ class AuthController extends Controller
 
       $new_user->api_token = Str::random(80);
       $new_user->api_token_expires = Carbon::now()->addHours(2);
-
-      if (isset($data['profile_img'])) {
-        $ext = $data['profile_img_ext'];
-        $filename = uniqid() . "." . $ext;
-        Storage::disk('s3')->put('images/avatars', $filename);
-        $new_user->profile_img_path = $filename;
-      } else {
-        $new_user->profile_img_path = "avatar.svg";
-      }
 
       $new_user->credit = 3.0;
 
