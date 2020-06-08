@@ -56,5 +56,9 @@ Route::post('/donate', 'DonateController@process_donate');
 Route::get('/donation/cancel/{cancel_url}', 'DonateController@cancel');
 
 // Organization Routes
+Route::get("/orgs", "OrgController@get_orgs");
+Route::get("/org/{id}", "OrgController@get_org");
+Route::post("/org", "OrgController@create_org");
+Route::put("/org/{id}", "OrgController@update_org");
 
 // OrgUser Routes
