@@ -100,6 +100,10 @@ class ContactController extends Controller
         $c->unit = $data['facility_unit'];
       }
 
+      if (isset($data['org_id'])) {
+        $c->org_id = $data['org_id'];
+      }
+
       $c->save();
 
       return api_response("OK", "", $c);
@@ -158,6 +162,10 @@ class ContactController extends Controller
 
       if (isset($data['facility_unit'])) {
         $c->unit = $data['facility_unit'];
+      }
+
+      if (isset($data['org_id'])) {
+        $c->org_id = $data['org_id'];
       }
 
       $c->save();
