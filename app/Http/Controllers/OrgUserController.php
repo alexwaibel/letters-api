@@ -15,6 +15,7 @@ class OrgUserController extends Controller
     public function __construct() {
       $this->middleware('auth:api');
       $this->middleware('throttle:60,1');
+      $this->middleware('token-expire');
     }
 
     // get_org_users()

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Zip;
+
 class ZipController extends Controller
 {
     public function query_zips($zip=null) {

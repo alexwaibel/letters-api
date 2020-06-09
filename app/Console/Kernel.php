@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->job(new ReupUserCredits)->daily();
-        $schedule->job(new ResetAPITokens)->everyMinute();
+        // $schedule->job(new ResetAPITokens)->everyMinute();
     }
 
     /**

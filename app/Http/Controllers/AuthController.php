@@ -15,7 +15,7 @@ use App\User;
 class AuthController extends Controller
 {
     public function __construct() {
-      $this->middleware('throttle:1,1');
+      $this->middleware('throttle:60,1');
     }
 
     public function login(Request $request) {
@@ -38,13 +38,23 @@ class AuthController extends Controller
           return api_response("ERROR", "Invalid Password", []);
         }
 
+        $token = $u->api_token;
+
         if (!$u->api_token) {
-          $u->api_token = Str::random(80);
+          $token = Str::random(80);
+          $u->api_token = hash('sha256', $token);
           $u->api_token_expires = Carbon::now()->addHours(2);
           $u->save();
         }
 
-        return api_response("OK", "", $u);
+        if ($u->api_token_expires < Carbon::now()) {
+          $token = Str::random(80);
+          $u->api_token = hash('sha256', $token);
+          $u->api_token_expires = Carbon::now()->addHours(2);
+          $u->save();
+        }
+
+        return api_response("OK", "", $token);
       }
 
       return api_response("ERROR", "Missing Fields", []);
@@ -99,7 +109,7 @@ class AuthController extends Controller
       $new_user->country = $data['country'];
       $new_user->referer = $data['referer'];
 
-      $new_user->api_token = Str::random(80);
+      $new_user->api_token = Hash::make(Str::random(80));
       $new_user->api_token_expires = Carbon::now()->addHours(2);
 
       $new_user->credit = 3.0;
