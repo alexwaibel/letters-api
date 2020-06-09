@@ -10,15 +10,15 @@ use Carbon\Carbon;
 
 class PublicController extends Controller
 {
-    public function letter_html(Request $request, $id) {
-      $letter = Letter::find($id);
+    public function letter_html(Request $request, $verify_token) {
+      $letter = Letter::where('verify_token', $verify_token)->first();
 
       if (!$letter) {
-        return;
+        return response([], 404);
       }
 
       if ($letter->viewed) {
-        return;
+        return response([], 404);
       }
 
       $letter->viewed = true;

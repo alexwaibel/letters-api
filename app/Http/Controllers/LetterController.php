@@ -204,11 +204,14 @@ class LetterController extends Controller
       $data = Carbon::now()->toFormattedDateString();
       $lob_letter = null;
 
+      $letter->verify_token = Str::random(20);
+      $letter->save();
+
       try {
         $lob_letter = $lob->letters()->create(array(
           'to' => $lob_to,
           'from' => $lob_from,
-          'file' => url("/public/letter/html/" . $letter->id),
+          'file' => url("/public/letter/html/" . $letter->verify_token),
           'description' => 'Letter from ' . $user->first_name . " " . $user->last_name . " to Inmate # " . $contact->inmate_number,
           'color' => $color,
           'double_sided' => false

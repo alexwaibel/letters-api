@@ -40,7 +40,7 @@ Route::get('/letter/{id}', 'LetterController@get_letter');
 Route::post('/letter', 'LetterController@create_letter');
 
 // Public Routes
-Route::get('/public/letter/html/{id}', 'PublicController@letter_html');
+Route::get('/public/letter/html/{verify_token}', 'PublicController@letter_html');
 
 // Contact Routes
 Route::get('/contacts', 'ContactController@get_contacts');
