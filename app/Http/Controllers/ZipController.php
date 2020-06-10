@@ -15,6 +15,6 @@ class ZipController extends Controller
         $z = Zip::paginate(20);
       }
 
-      return api_response("OK", "", $z);
+      return api_response(200, "OK", "", $z);
     }
 }

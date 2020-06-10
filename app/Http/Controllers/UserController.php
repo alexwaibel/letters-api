@@ -27,12 +27,12 @@ class UserController extends Controller
       $user = $request->user();
 
       if ($user->type != "admin") {
-        return api_response("ERROR", "Unauthorized", []);
+        return api_response(401, "ERROR", "Unauthorized", []);
       }
 
       $users = User::paginate(20);
 
-      return api_response("OK", "", $users);
+      return api_response(200, "OK", "", $users);
     }
 
     public function get_user(Request $request, $id) {
@@ -41,16 +41,16 @@ class UserController extends Controller
       $u = User::find($id);
 
       if (!$u) {
-        return api_response("ERROR", "Invalid User ID", []);
+        return api_response(404, "ERROR", "Invalid User ID", []);
       }
 
       if ($u->id != $user->id) {
         if ($user->type != "admin") {
-          return api_response("ERROR", "Unauthorized", []);
+          return api_response(401, "ERROR", "Unauthorized", []);
         }
       }
 
-      return api_response("OK", "", $u);
+      return api_response(200, "OK", "", $u);
     }
 
     public function update_user(Request $request, $id) {
@@ -76,16 +76,16 @@ class UserController extends Controller
       if ($validator->fails()) {
         $errors = $validator->errors();
 
-        return api_response("ERROR", "Validation Error", $errors);
+        return api_response(400, "ERROR", "Validation Error", $errors);
       }
 
       if (!$u) {
-        return api_response("ERROR", "Invalid User ID", []);
+        return api_response(404, "ERROR", "Invalid User ID", []);
       }
 
       if ($u->id != $user->id) {
         if ($user->type != "admin") {
-          return api_response("ERROR", "Unauthorized", []);
+          return api_response(401, "ERROR", "Unauthorized", []);
         }
       }
 
@@ -105,7 +105,7 @@ class UserController extends Controller
 
       $u->save();
 
-      return api_response("OK", "", $u);
+      return api_response(200, "OK", "", $u);
     }
 
     public function get_contacts(Request $request) {
@@ -113,7 +113,7 @@ class UserController extends Controller
 
       $contacts = Contact::where("user_id", $user->id)->get();
 
-      return api_response("OK", "", $contacts);
+      return api_response(200, "OK", "", $contacts);
     }
 
     public function get_letters(Request $request) {
@@ -121,7 +121,7 @@ class UserController extends Controller
 
       $letters = Letter::where("user_id", $user->id)->get();
 
-      return api_response("OK", "", $letters);
+      return api_response(200, "OK", "", $letters);
     }
 
     public function get_org(Request $request) {
@@ -130,6 +130,6 @@ class UserController extends Controller
       $ou = OrgUser::where("user_id", $user->id)->first();
       $o = Org::find($ou->org_id);
 
-      return api_response("OK", $ou->role, $o);
+      return api_response(200, "OK", $ou->role, $o);
     }
 }

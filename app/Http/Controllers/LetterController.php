@@ -33,7 +33,7 @@ class LetterController extends Controller
         $letter = Letter::where("user_id", $user->id)->paginate(20);
       }
 
-      return api_response("OK", "", $letters);
+      return api_response(200, "OK", "", $letters);
     }
 
     public function get_letter(Request $request, $id) {
@@ -42,23 +42,23 @@ class LetterController extends Controller
       $l = Letter::find($id);
 
       if (!$l) {
-        return api_response("ERROR", "Invalid Letter ID", []);
+        return api_response(404, "ERROR", "Invalid Letter ID", []);
       }
 
       if ($l->user_id != $user->id) {
         if ($user->type != "admin") {
-          return api_response("ERROR", "Unauthorized", []);
+          return api_response(401, "ERROR", "Unauthorized", []);
         }
       }
 
-      return api_response("OK", "", $l);
+      return api_response(200, "OK", "", $l);
     }
 
     public function create_letter(Request $request) {
       $user = $request->user();
 
       if ($user->credit <= 0) {
-        return api_response("ERROR", "Reached Letter Limit", []);
+        return api_response(400, "ERROR", "Reached Letter Limit", []);
       }
 
       $data = json_decode($request->getContent(), true);
@@ -74,7 +74,7 @@ class LetterController extends Controller
       if ($validator->fails()) {
         $errors = $validator->errors();
 
-        return api_response("ERROR", "Validation Error", $errors);
+        return api_response(400, "ERROR", "Validation Error", $errors);
       }
 
       // Grab the Letter that already exists OR
@@ -83,7 +83,7 @@ class LetterController extends Controller
         $letter = Letter::find($data['letter_id']);
 
         if (!$letter) {
-          return api_response("ERROR", "Invalid Letter ID", []);
+          return api_response(404, "ERROR", "Invalid Letter ID", []);
         }
       } else {
         $letter = new Letter;
@@ -93,12 +93,12 @@ class LetterController extends Controller
       $contact = Contact::find($data['contact_id']);
 
       if (!$contact) {
-        return api_response("ERROR", "Invalid Contact ID", []);
+        return api_response(404, "ERROR", "Invalid Contact ID", []);
       }
 
       if ($contact->user_id != $user->id) {
         if ($user->type != "admin") {
-          return api_response("ERROR", "Unauthorized", []);
+          return api_response(401, "ERROR", "Unauthorized", []);
         }
       }
 
@@ -119,7 +119,7 @@ class LetterController extends Controller
         $letter->sent = false;
         $letter->save();
 
-        return api_response("OK", "Saved Draft", $letter);
+        return api_response(200, "OK", "Saved Draft", $letter);
       }
 
 
@@ -245,9 +245,9 @@ class LetterController extends Controller
       $letter->save();
 
       if ($letter->sent) {
-        return api_response("OK", "Letter Sent", $letter);
+        return api_response(200, "OK", "Letter Sent", $letter);
       } else {
-        return api_response("ERROR", "Lob Error", $letter->lob_message);
+        return api_response(400, "ERROR", "Lob Error", $letter->lob_message);
       }
     }
 }

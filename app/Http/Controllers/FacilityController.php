@@ -24,41 +24,41 @@ class FacilityController extends Controller
     $user = $request->user();
 
     if ($user->type != "admin") {
-      return api_response("ERROR", "Unauthorized", []);
+      return api_response(401, "ERROR", "Unauthorized", []);
     }
 
     $facilities = Facility::paginate(20);
 
-    return api_response("OK", "", $facilities);
+    return api_response(200, "OK", "", $facilities);
   }
 
   public function get_facility(Request $request, $id) {
     $user = $request->user();
 
     if ($user->type != "admin") {
-      return api_response("ERROR", "Unauthorized", []);
+      return api_response(401, "ERROR", "Unauthorized", []);
     }
 
     $f = Facility::find($id);
 
     if (!$f) {
-      return api_response("ERROR", "Invalid Facility ID", []);
+      return api_response(404, "ERROR", "Invalid Facility ID", []);
     }
 
     if ($f->user_id != $user->id) {
       if ($user->type != "admin") {
-        return api_response("ERROR", "Unauthorized", []);
+        return api_response(401, "ERROR", "Unauthorized", []);
       }
     }
 
-    return api_response("OK", "", $f);
+    return api_response(200, "OK", "", $f);
   }
 
   public function create_facility(Request $request) {
     $user = $request->user();
 
     if ($user->type != "admin") {
-      return api_response("ERROR", "Unauthorized", []);
+      return api_response(401, "ERROR", "Unauthorized", []);
     }
 
     $data = json_decode($request->getContent(), true);
@@ -77,7 +77,7 @@ class FacilityController extends Controller
     if ($validator->fails()) {
       $errors = $validator->errors();
 
-      return api_response("ERROR", "Validation Error", $errors);
+      return api_response(400, "ERROR", "Validation Error", $errors);
     }
 
     $f = new Facility;
@@ -101,7 +101,7 @@ class FacilityController extends Controller
 
     $f->save();
 
-    return api_response("OK", "", $f);
+    return api_response(200, "OK", "", $f);
   }
 
   public function update_facility(Request $request, $id) {
@@ -112,11 +112,11 @@ class FacilityController extends Controller
     $f = Facility::find($id);
 
     if (!$f) {
-      return api_response("ERROR", "Invalid Facility ID", []);
+      return api_response(404, "ERROR", "Invalid Facility ID", []);
     }
 
     if ($user->type != "admin") {
-      return api_response("ERROR", "Unauthorized", []);
+      return api_response(401, "ERROR", "Unauthorized", []);
     }
 
     $validator = Validator::make($data, [
@@ -133,7 +133,7 @@ class FacilityController extends Controller
     if ($validator->fails()) {
       $errors = $validator->errors();
 
-      return api_response("ERROR", "Validation Error", $errors);
+      return api_response(400, "ERROR", "Validation Error", $errors);
     }
 
     $f->name = $data['name'];
@@ -155,6 +155,6 @@ class FacilityController extends Controller
 
     $f->save();
 
-    return api_response("OK", "", $f);
+    return api_response(200, "OK", "", $f);
   }
 }

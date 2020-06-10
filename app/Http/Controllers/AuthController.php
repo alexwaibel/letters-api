@@ -31,11 +31,11 @@ class AuthController extends Controller
         $u = User::where('email', $data['email'])->first();
 
         if (!$u) {
-          return api_response("ERROR", "Invalid Email", []);
+          return api_response(400, "ERROR", "Invalid Email", []);
         }
 
         if (!Hash::check($data['password'], $u->password)) {
-          return api_response("ERROR", "Invalid Password", []);
+          return api_response(400, "ERROR", "Invalid Password", []);
         }
 
         $token = $u->api_token;
@@ -54,10 +54,10 @@ class AuthController extends Controller
           $u->save();
         }
 
-        return api_response("OK", "", $token);
+        return api_response(200, "OK", "", $token);
       }
 
-      return api_response("ERROR", "Missing Fields", []);
+      return api_response(400, "ERROR", "Missing Fields", []);
     }
 
     public function register(Request $request) {
@@ -81,7 +81,7 @@ class AuthController extends Controller
       if ($validator->fails()) {
         $errors = $validator->errors();
 
-        return api_response("ERROR", "Validation Error", $errors);
+        return api_response(400, "ERROR", "Validation Error", $errors);
       }
 
       $new_user = new User;
@@ -116,6 +116,6 @@ class AuthController extends Controller
 
       $new_user->save();
 
-      return api_response("OK", "", $new_user);
+      return api_response(200, "OK", "", $new_user);
     }
 }

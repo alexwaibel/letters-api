@@ -26,39 +26,39 @@ class OrgUserController extends Controller
       $user = $request->user();
 
       if ($user->type != "admin") {
-        return api_response("ERROR", "Unauthorized", []);
+        return api_response(401, "ERROR", "Unauthorized", []);
       }
 
       $org_users = OrgUser::paginate(20);
 
-      return api_response("OK", "", $org_users);
+      return api_response(200, "OK", "", $org_users);
     }
 
     public function get_org_user(Request $request, $id) {
       $user = $request->user();
 
       if ($user->type != "admin") {
-        return api_response("ERROR", "Unauthorized", []);
+        return api_response(401, "ERROR", "Unauthorized", []);
       }
 
       $ou = OrgUser::find($id);
 
       if (!$ou) {
-        return api_response("ERROR", "Invalid Org User ID", []);
+        return api_response(404, "ERROR", "Invalid Org User ID", []);
       }
 
       if ($user->type != "admin") {
-        return api_response("ERROR", "Unauthorized", []);
+        return api_response(401, "ERROR", "Unauthorized", []);
       }
 
-      return api_response("OK", "", $ou);
+      return api_response(200, "OK", "", $ou);
     }
 
     public function create_org_user(Request $request) {
       $user = $request->user();
 
       if ($user->type != "admin") {
-        return api_response("ERROR", "Unauthorized", []);
+        return api_response(401, "ERROR", "Unauthorized", []);
       }
 
       $data = json_decode($request->getContent(), true);
@@ -72,7 +72,7 @@ class OrgUserController extends Controller
       if ($validator->fails()) {
         $errors = $validator->errors();
 
-        return api_response("ERROR", "Validation Error", $errors);
+        return api_response(400, "ERROR", "Validation Error", $errors);
       }
 
       $ou = new OrgUser;
@@ -83,7 +83,7 @@ class OrgUserController extends Controller
 
       $ou->save();
 
-      return api_response("OK", "", $ou);
+      return api_response(200, "OK", "", $ou);
     }
 
     public function update_org_user(Request $request, $id) {
@@ -94,11 +94,11 @@ class OrgUserController extends Controller
       $ou = OrgUser::find($id);
 
       if (!$ou) {
-        return api_response("ERROR", "Invalid Org User ID", []);
+        return api_response(404, "ERROR", "Invalid Org User ID", []);
       }
 
       if ($user->type != "admin") {
-        return api_response("ERROR", "Unauthorized", []);
+        return api_response(401, "ERROR", "Unauthorized", []);
       }
 
       $validator = Validator::make($data, [
@@ -110,7 +110,7 @@ class OrgUserController extends Controller
       if ($validator->fails()) {
         $errors = $validator->errors();
 
-        return api_response("ERROR", "Validation Error", $errors);
+        return api_response(400, "ERROR", "Validation Error", $errors);
       }
 
       $ou->org_id = $data['org_id'];
@@ -119,6 +119,6 @@ class OrgUserController extends Controller
 
       $ou->save();
 
-      return api_response("OK", "", $ou);
+      return api_response(200, "OK", "", $ou);
     }
 }

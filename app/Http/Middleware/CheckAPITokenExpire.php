@@ -18,7 +18,7 @@ class CheckAPITokenExpire
         $user = $request->user();
 
         if ($user->api_token_expires < \Carbon\Carbon::now()) {
-          return response(api_response("ERROR", "Expired Token", []), 401);
+          return api_response(401, "ERROR", "Expired Token", []);
         }
         return $next($request);
     }

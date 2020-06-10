@@ -24,12 +24,12 @@ class ContactController extends Controller
       $user = $request->user();
 
       if ($user->type != "admin") {
-        return api_response("ERROR", "Unauthorized", []);
+        return api_response(401, "ERROR", "Unauthorized", []);
       }
 
       $contacts = Contact::paginate(20);
 
-      return api_response("OK", "", $contacts);
+      return api_response(200, "OK", "", $contacts);
     }
 
     public function get_contact(Request $request, $id) {
@@ -38,16 +38,16 @@ class ContactController extends Controller
       $c = Contact::find($id);
 
       if (!$c) {
-        return api_response("ERROR", "Invalid Contact ID", []);
+        return api_response(404, "ERROR", "Invalid Contact ID", []);
       }
 
       if ($c->user_id != $user->id) {
         if ($user->type != "admin") {
-          return api_response("ERROR", "Unauthorized", []);
+          return api_response(401, "ERROR", "Unauthorized", []);
         }
       }
 
-      return api_response("OK", "", $c);
+      return api_response(200, "OK", "", $c);
     }
 
     public function create_contact(Request $request) {
@@ -74,7 +74,7 @@ class ContactController extends Controller
       if ($validator->fails()) {
         $errors = $validator->errors();
 
-        return api_response("ERROR", "Validation Error", $errors);
+        return api_response(400, "ERROR", "Validation Error", $errors);
       }
 
       $c = new Contact;
@@ -109,7 +109,7 @@ class ContactController extends Controller
 
       $c->save();
 
-      return api_response("OK", "", $c);
+      return api_response(200, "OK", "", $c);
     }
 
     public function update_contact(Request $request, $id) {
@@ -120,12 +120,12 @@ class ContactController extends Controller
       $c = Contact::find($id);
 
       if (!$c) {
-        return api_response("ERROR", "Invalid Contact ID", []);
+        return api_response(404, "ERROR", "Invalid Contact ID", []);
       }
 
       if ($c->user_id != $user->id) {
         if ($user->type != "admin") {
-          return api_response("ERROR", "Unauthorized", []);
+          return api_response(401, "ERROR", "Unauthorized", []);
         }
       }
 
@@ -148,7 +148,7 @@ class ContactController extends Controller
       if ($validator->fails()) {
         $errors = $validator->errors();
 
-        return api_response("ERROR", "Validation Error", $errors);
+        return api_response(400, "ERROR", "Validation Error", $errors);
       }
 
       $c->first_name = $data['first_name'];
@@ -179,6 +179,6 @@ class ContactController extends Controller
 
       $c->save();
 
-      return api_response("OK", "", $c);
+      return api_response(200, "OK", "", $c);
     }
 }

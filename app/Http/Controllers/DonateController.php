@@ -91,7 +91,7 @@ class DonateController extends Controller
         $new_donor->save();
       }
 
-      return api_response("OK", "Donation Accepted", $new_donor);
+      return api_response(200, "OK", "Donation Accepted", $new_donor);
     }
 
     public function cancel(Request $request, $cancel_url) {
@@ -100,7 +100,7 @@ class DonateController extends Controller
       $donor = Donor::where("cancel_url", $cancel_url)->first();
 
       if (!$donor) {
-        return api_response("ERROR", "Invalid Donor Cancel URL", []);
+        return api_response(404, "ERROR", "Invalid Donor Cancel URL", []);
       }
 
       if (env('STRIPE_PROD')) {
@@ -112,6 +112,6 @@ class DonateController extends Controller
       $sub = Subscription::retrieve($donor->stripe_id);
       $sub->delete();
 
-      return api_response("OK", "Subscription Cancelled", []);
+      return api_response(200, "OK", "Subscription Cancelled", []);
     }
 }
