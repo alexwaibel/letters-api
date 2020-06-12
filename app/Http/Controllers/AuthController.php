@@ -36,6 +36,7 @@ class AuthController extends Controller
 
         $token = Str::random(80);
         $u->api_token = hash('sha256', $token);
+        $u->api_token_expires = Carbon::now()->addHours(2);
 
         if (!$u->api_token) {
           $u->api_token = hash('sha256', $token);
@@ -80,6 +81,7 @@ class AuthController extends Controller
         $token = Str::random(80);
         $u->api_token = hash('sha256', $token);
         $remember_token = $u->remember_token;
+        $u->api_token_expires = Carbon::now()->addHours(2);
 
         if (!$u->api_token) {
           $u->api_token = hash('sha256', $token);
