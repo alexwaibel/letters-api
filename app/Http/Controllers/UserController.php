@@ -130,6 +130,10 @@ class UserController extends Controller
       $ou = OrgUser::where("user_id", $user->id)->first();
       $o = Org::find($ou->org_id);
 
+      if (!$ou) {
+        return api_response(404, "ERROR", "No organization.", []);
+      }
+
       return api_response(200, "OK", $ou->role, $o);
     }
 }

@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 // Auth Routes
 Route::post('/login', 'AuthController@login');
+Route::post('/login/token', 'AuthController@login_with_token');
 Route::post('/register', 'AuthController@register');
 
 // User Routes

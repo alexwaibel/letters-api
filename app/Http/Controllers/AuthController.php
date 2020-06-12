@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use Validator;
 use Hash;
@@ -16,6 +17,44 @@ class AuthController extends Controller
 {
     public function __construct() {
       $this->middleware('throttle:60,1');
+    }
+
+    public function login_with_token(Request $request) {
+      $data = json_decode($request->getContent(), true);
+
+      $validator = Validator::make($data, [
+        'token' => 'required'
+      ]);
+
+      if ($validator->passes()) {
+        // Validate User
+        $u = User::where('remember_token', $data['token'])->first();
+
+        if (!$u) {
+          return api_response(400, "ERROR", "Invalid Token", []);
+        }
+
+        $token = Str::random(80);
+        $u->api_token = hash('sha256', $token);
+
+        if (!$u->api_token) {
+          $u->api_token = hash('sha256', $token);
+          $u->api_token_expires = Carbon::now()->addHours(2);
+          $u->save();
+        }
+
+        if ($u->api_token_expires < Carbon::now()) {
+          $u->api_token = hash('sha256', $token);
+          $u->api_token_expires = Carbon::now()->addHours(2);
+          $u->save();
+        }
+
+        $u->save();
+
+        return api_response(200, "OK", "", $token);
+      }
+
+      return api_response(400, "ERROR", "Missing Fields", []);
     }
 
     public function login(Request $request) {
@@ -38,23 +77,36 @@ class AuthController extends Controller
           return api_response(400, "ERROR", "Invalid Password", []);
         }
 
-        $token = $u->api_token;
+        $token = Str::random(80);
+        $u->api_token = hash('sha256', $token);
+        $remember_token = $u->remember_token;
 
         if (!$u->api_token) {
-          $token = Str::random(80);
           $u->api_token = hash('sha256', $token);
           $u->api_token_expires = Carbon::now()->addHours(2);
           $u->save();
         }
 
         if ($u->api_token_expires < Carbon::now()) {
-          $token = Str::random(80);
           $u->api_token = hash('sha256', $token);
           $u->api_token_expires = Carbon::now()->addHours(2);
           $u->save();
         }
 
-        return api_response(200, "OK", "", $token);
+        if (!$remember_token) {
+          $remember_token = Str::random(100);
+          $u->remember_token = $remember_token;
+          $u->save();
+        }
+
+        $u->save();
+
+        $res = [
+          'token' => $token,
+          'remember' => $remember_token
+        ];
+
+        return api_response(200, "OK", "", $res);
       }
 
       return api_response(400, "ERROR", "Missing Fields", []);
