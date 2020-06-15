@@ -16,7 +16,7 @@ use App\User;
 /**
  * @group Authentication
  * 
- * APIS for handling authenticating users
+ * APIs for handling authenticating users
  */
 class AuthController extends Controller
 {
@@ -165,7 +165,7 @@ class AuthController extends Controller
      * @bodyParam referer string required Entity who referred the user to Ameelio Letters. Example: Facebook
      * @bodyParam postal string required Zip code of user. Example: 31206
      * @bodyParam phone string required Phone number of user. Example: 111-222-3333
-     * @bodyParam s3_img_url string AWS S3 URL of the profile picture of user.
+     * @bodyParam s3_img_url string AWS S3 URL of the profile picture of user. Example: https://s3/images/avatars/0801702837123.png
      * 
      * @response {
      *   "date": 1591997000,
