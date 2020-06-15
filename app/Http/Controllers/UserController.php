@@ -11,6 +11,12 @@ use App\OrgUser;
 use App\Letter;
 use App\Contact;
 
+/**
+ * @authenticated
+ * @group Users
+ * 
+ * APIs for managing users
+ */
 class UserController extends Controller
 {
     public function __construct() {
@@ -19,10 +25,13 @@ class UserController extends Controller
       $this->middleware('token-expire');
     }
 
-    // get_users()
-    // Allows admin to get a paginated list of users.
-    // Page Limit: 20
-    // Use the 'page' GET attribute to specify page
+    /**
+     * Retrieve paginated list of users
+     * 
+     * Must be authenticated as an admin.
+     * 
+     * @urlParam page The page of users to fetch
+     */
     public function get_users(Request $request) {
       $user = $request->user();
 
@@ -35,6 +44,11 @@ class UserController extends Controller
       return api_response(200, "OK", "", $users);
     }
 
+    /**
+     * Retrieve user profile details
+     * 
+     * Must be authenticated as an admin to get details of users other than the currently authenticated user.
+     */
     public function get_user(Request $request, $id) {
       $user = $request->user();
 
@@ -53,6 +67,21 @@ class UserController extends Controller
       return api_response(200, "OK", "", $u);
     }
 
+    /**
+     * Update profile details of a user
+     * 
+     * Must be authenticated as an admin to update details of other user's.
+     * 
+     * @bodyParam first_name string required First name of user. Example: John
+     * @bodyParam last_name string required Last name of user. Example: Smith
+     * @bodyParam address_line_1 string required First line of address of user. Example: 123 Test St.
+     * @bodyParam address_line_2 string Second line of address of user. Example: APT 1
+     * @bodyParam city string required City of user. Example: Atlanta
+     * @bodyParam state string required Two digit state abbreviation of US state of user. Example: GA
+     * @bodyParam country string required Country of user. Example: US
+     * @bodyParam postal string required Zip code of user. Example: 31206
+     * @bodyParam phone string required Phone number of user. Example: 111-222-3333
+     */
     public function update_user(Request $request, $id) {
       $user = $request->user();
 
@@ -108,6 +137,9 @@ class UserController extends Controller
       return api_response(200, "OK", "", $u);
     }
 
+    /**
+     * Get all contatcts belonging to the authenticated user
+     */
     public function get_contacts(Request $request) {
       $user = $request->user();
 
@@ -116,6 +148,9 @@ class UserController extends Controller
       return api_response(200, "OK", "", $contacts);
     }
 
+    /**
+     * Get all letters belonging to the authenticated user
+     */
     public function get_letters(Request $request) {
       $user = $request->user();
 
@@ -124,6 +159,9 @@ class UserController extends Controller
       return api_response(200, "OK", "", $letters);
     }
 
+    /**
+     * Get the organization to which the authenticated user belongs
+     */
     public function get_org(Request $request) {
       $user = $request->user();
 
