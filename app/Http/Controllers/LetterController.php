@@ -12,6 +12,12 @@ use App\User;
 use App\Contact;
 use App\Letter;
 
+/**
+ * @authenticated
+ * @group Letters
+ * 
+ * APIs for managing letters
+ */
 class LetterController extends Controller
 {
     public function __construct() {
@@ -20,10 +26,13 @@ class LetterController extends Controller
       $this->middleware('token-expire');
     }
 
-    // get_letters()
-    // Allows admin to get a paginated list of letters.
-    // Page Limit: 20
-    // Use the 'page' GET attribute to specify page
+    /**
+     * Retrieve paginated list of letters
+     * 
+     * Allows users to get their own letter history and admins to get full letter history of all users.
+     * 
+     * @urlParam page The page of letters to fetch
+     */
     public function get_letters(Request $request) {
       $user = $request->user();
 
@@ -36,6 +45,11 @@ class LetterController extends Controller
       return api_response(200, "OK", "", $letters);
     }
 
+    /**
+     * Retrieve details of specific letter
+     * 
+     * Allows users to get details of their own letter and admins to get details of any letter. Useful for viewing things like lob details.
+     */
     public function get_letter(Request $request, $id) {
       $user = $request->user();
 
@@ -54,6 +68,17 @@ class LetterController extends Controller
       return api_response(200, "OK", "", $l);
     }
 
+    /**
+     * Create a new letter
+     * 
+     * Letters can be 'draft's or they can be sent immediately.
+     * 
+     * @bodyParam letter_id number The ID of the draft to send. Example: 20
+     * @bodyParam contact_id number required The ID of the contact to which the letter will be sent. Example: 1
+     * @bodyParam content string required The body text of the letter. Example: "I love writing letters!"
+     * @bodyParam is_draft boolean Whether or not the letter is a draft. Example: true
+     * @bodyParam s3_img_url string The AWS S3 URL of the image to be attached to the letter. Example: https://i.redd.it/w3kr4m2fi3111.png
+     */
     public function create_letter(Request $request) {
       $user = $request->user();
 

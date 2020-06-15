@@ -13,12 +13,29 @@ use Carbon\Carbon;
 
 use App\User;
 
+/**
+ * @group Authentication
+ * 
+ * APIs for handling authenticating users
+ */
 class AuthController extends Controller
 {
     public function __construct() {
       $this->middleware('throttle:60,1');
     }
 
+    /**
+     * Authenticate a user by token
+     *
+     * @bodyParam token string required The remember token from the original login request. Example: TB3rodjv4eJsm1Rp2xRHf9JC6hk6dfnh5N3u5mOWJNUIY10BSmdZoDPFnMIUITDm4nPmktzmSbwdSZJQfk1w4QENEoCC4QTM1MvX
+     *
+     * @response {
+     *   "date": 1591997000,
+     *   "status": "OK",
+     *   "message": "",
+     *   "data": "ruUJKEUzeNrGLtrhYW7vGbikyVpns4rVsQ7O616qRxthO0Mm8nI9TaTYkiR9vE2QPnVpCuCPnWBuPkgL"
+     * }
+     */
     public function login_with_token(Request $request) {
       $data = json_decode($request->getContent(), true);
 
@@ -58,6 +75,24 @@ class AuthController extends Controller
       return api_response(400, "ERROR", "Missing Fields", []);
     }
 
+     /**
+     * Authenticate a user by email and password
+     * 
+     * For use if the user's rememver token is no longer valid.
+     * 
+     * @bodyParam email string required The email of the account to be logged in. Example: tim01@smith.com
+     * @bodyParam password string required The password of the account to be logged in. Example: password1234
+     * 
+     * @response {
+     *   "date": 1591997000,
+     *   "status": "OK",
+     *   "message": "",
+     *   "data": {
+     *     "token": "147WecYkPYL5LppPIg5m5LY5d9NBoBUyn6Z65lPnuwfiahY4B86zCmcKFx6S0sJoSz3TCSrDNOCmjPZn",
+     *     "remember": "TB3rodjv4eJsm1Rp2xRHf9JC6hk6dfnh5N3u5mOWJNUIY10BSmdZoDPFnMIUITDm4nPmktzmSbwdSZJQfk1w4QENEoCC4QTM1MvX"
+     *    }
+     * }
+     */
     public function login(Request $request) {
       $data = json_decode($request->getContent(), true);
 
@@ -113,7 +148,49 @@ class AuthController extends Controller
 
       return api_response(400, "ERROR", "Missing Fields", []);
     }
-
+ 
+    /**
+     * Register a new user
+     * 
+     * @bodyParam email string required The email of the account to be created. Example: tim01@smith.com
+     * @bodyParam password string required The password of the account to be created. Example: password1234
+     * @bodyParam password_confirmation string required Repeat of the password of the account to be created. Example: password1234
+     * @bodyParam first_name string required First name of user. Example: John
+     * @bodyParam last_name string required Last name of user. Example: Smith
+     * @bodyParam address_line_1 string required First line of address of user. Example: 123 Test St.
+     * @bodyParam address_line_2 string Second line of address of user. Example: APT 1
+     * @bodyParam city string required City of user. Example: Atlanta
+     * @bodyParam state string required Two digit state abbreviation of US state of user. Example: GA
+     * @bodyParam country string required Country of user. Example: US
+     * @bodyParam referer string required Entity who referred the user to Ameelio Letters. Example: Facebook
+     * @bodyParam postal string required Zip code of user. Example: 31206
+     * @bodyParam phone string required Phone number of user. Example: 111-222-3333
+     * @bodyParam s3_img_url string AWS S3 URL of the profile picture of user. Example: https://s3/images/avatars/0801702837123.png
+     * 
+     * @response {
+     *   "date": 1591997000,
+     *   "status": "OK",
+     *   "message": "",
+     *   "data": {
+     *     "email": "tim01@smith.com",
+     *     "first_name": "Tim01",
+     *     "last_name": "Smith",
+     *     "phone": "111-222-3333",
+     *     "addr_line_1": "123 Test St.",
+     *     "profile_img_path": "https://ameelio-letters-staging-images.s3.amazonaws.com/images/avatars/12319898123/.png",
+     *     "city": "Atlanta",
+     *     "state": "GA",
+     *     "postal": "31206",
+     *     "country": "US",
+     *     "referer": "Other",
+     *     "api_token_expires": "2020-06-12T23:23:19.305885Z",
+     *     "credit": 3,
+     *     "updated_at": "2020-06-12T21:23:19.000000Z",
+     *     "created_at": "2020-06-12T21:23:19.000000Z",
+     *     "id": 15
+     *   }
+     * }
+     */
     public function register(Request $request) {
       $data = json_decode($request->getContent(), true);
 

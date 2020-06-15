@@ -17,6 +17,7 @@
         "league/flysystem-aws-s3-v3": "~1.0",
         "league/flysystem-cached-adapter": "~1.0",
         "lob/lob-php": "^3.0",
+        "mpociot/laravel-apidoc-generator": "^4.8",
         "stripe/stripe-php": "^7.31"
     },
     "require-dev": {
