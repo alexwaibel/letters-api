@@ -6,7 +6,7 @@ The JSON API for interacting with the Letters database.
 
 **Please Note:** This is a very new project and is subject to change rapidly. Currently, this is meant to run alongside the Letters project, to provide an API that other clients can interact with easily, but in the future we hope to use this API to replace the current Letters functionality.
 
-**For Documentation:** Please check this repositories Wiki.
+**For Documentation:** Documentation is hosted [here](https://ameeliodev.github.io/letters-api/).
 
 ## Getting Started
 
